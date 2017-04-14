@@ -13,7 +13,7 @@ See the 'Overview' section below for more details on the structure of the projec
 Once you're familiar with the game and how the code is organized, you will be implementing one new game in this project.
 In this game you should be able to:
 
-1. Specify in the session file whether the stimulus (rectangle) position per trial is random or predefined.
+- Specify in the session file whether the stimulus (rectangle) position per trial is random or predefined.
   - The predefined position should be defined inside the session file on a per trial basis. 
   - While the random position should be generated based off a defined range.
 - Specify in the session file whether the stimulus should sometimes appear red, in which case the player should NOT respond in order to get a correct response.
