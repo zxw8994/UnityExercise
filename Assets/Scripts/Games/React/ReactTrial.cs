@@ -11,7 +11,7 @@ using System.Xml.Linq;
 public class ReactTrial : Trial
 {
 	/// <summary>
-	/// The distance ratio that will be targeted.
+	/// The duration the stimulus will be shown for.
 	/// </summary>
 	public float duration = 0;
 
