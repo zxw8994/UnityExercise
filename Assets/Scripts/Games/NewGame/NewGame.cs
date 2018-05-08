@@ -12,7 +12,7 @@ public class NewGame : GameBase {
     const string RESPONSE_TIMEOUT = "Missed it";
     const string RESPONSE_SLOW = "Too Slow";
     const string RESPONSE_WRONG = "Not the Red Square.";
-    const string RESPONSE_PASSED = "Not Fooled"; // Is it Necessary??
+    const string RESPONSE_PASSED = "Weren't Fooled"; // Is it Necessary??
     Color RESPONSE_COLOR_GOOD = Color.green;
     Color RESPONSE_COLOR_BAD = Color.red;
 
@@ -52,6 +52,12 @@ public class NewGame : GameBase {
         GameObject stim = stimulus;
         stim.SetActive(false);
 
+        stim.GetComponent<Image>().color = Color.white;
+        if (t.isRed)
+        {
+            stim.GetComponent<Image>().color = RESPONSE_COLOR_BAD;
+        }
+
         yield return new WaitForSeconds(t.delay);
 
         StartInput();
@@ -90,7 +96,14 @@ public class NewGame : GameBase {
     {
         TrialResult r = new TrialResult(t);
         r.responseTime = time;
-        if(time == 0)
+        if (time == 0 && t.isRed)
+        {
+            // Didn't respond to red square
+            r.success = true;
+            DisplayFeedBack(RESPONSE_PASSED, RESPONSE_COLOR_GOOD);
+            GUILog.Log("Correct! Weren't Fooled! responseTime = {0}", time);
+        }
+        else if (time == 0)
         {
             DisplayFeedBack(RESPONSE_TIMEOUT, RESPONSE_COLOR_BAD);
             GUILog.Log("Fail! No response!");
@@ -117,11 +130,6 @@ public class NewGame : GameBase {
                 // Responded to the Red Square
                 DisplayFeedBack(RESPONSE_WRONG, RESPONSE_COLOR_BAD);
                 GUILog.Log("Fail! Wrong response! responseTime = {0}", time);
-            }else if (t.isRed)
-            {
-                // Didn't respond to red square
-                r.success = true;
-                GUILog.Log("Correct! Weren't Fooled! responseTime = {0}", time);
             }
             else
             {

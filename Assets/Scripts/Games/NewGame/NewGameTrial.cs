@@ -8,7 +8,6 @@ public class NewGameTrial : Trial {
 
 
     public float duration = 0;
-    public bool isRed = false;
 
     #region ACCESSORS
 
@@ -17,13 +16,6 @@ public class NewGameTrial : Trial {
         get
         {
             return duration;
-        }
-    }
-    public bool IsRed
-    {
-        get
-        {
-            return isRed;
         }
     }
 
@@ -45,6 +37,7 @@ public class NewGameTrial : Trial {
             duration = data.GeneratedDuration;
         }
         
+
     }
 
     public override void WriteOutputData(ref XElement elem)
