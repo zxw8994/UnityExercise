@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class NewGame : GameBase {
 
-    const string INSTRUCTIONS = "Press <color=cyan>SpaceBar</color> only when you see a <color=green>Green Square</color>.";
+    const string INSTRUCTIONS = "Press <color=cyan>SpaceBar</color> only when you see a White Square.";
     const string FINISHED = "FINISHED";
     const string RESPONSE_GUESS = "No Guessing";
     const string RESPONSE_CORRECT = "GOOD";
@@ -57,7 +57,7 @@ public class NewGame : GameBase {
         StartInput();
         stim.SetActive(true);
 
-        //yield return new WaitForSeconds(((NewGameTrial)t).duration);
+        yield return new WaitForSeconds(((NewGameTrial)t).duration);
         stim.SetActive(false);
         EndInput();
 
@@ -104,7 +104,7 @@ public class NewGame : GameBase {
                 GUILog.Log("Fail! Guess response! responseTime = {0}", time);
 
             }
-            else if (IsValidResponse(time))
+            else if (IsValidResponse(time) && !t.isRed)
             {
                 // Responded Correctly
                 DisplayFeedBack(RESPONSE_CORRECT, RESPONSE_COLOR_GOOD);
@@ -112,11 +112,16 @@ public class NewGame : GameBase {
                 r.accuracy = GetAccuracy(t, time);
                 GUILog.Log("Success! responseTime = {0}", time);
             }
-            else if (IsWrongResponse(time))
+            else if (IsWrongResponse(time) && t.isRed)
             {
                 // Responded to the Red Square
                 DisplayFeedBack(RESPONSE_WRONG, RESPONSE_COLOR_BAD);
-                GUILog.Log("Fail! Wrong response! responseTime = {0}",time);
+                GUILog.Log("Fail! Wrong response! responseTime = {0}", time);
+            }else if (t.isRed)
+            {
+                // Didn't respond to red square
+                r.success = true;
+                GUILog.Log("Correct! Weren't Fooled! responseTime = {0}", time);
             }
             else
             {
@@ -162,12 +167,11 @@ public class NewGame : GameBase {
         return data.ResponseTimeLimit <= 0 || time < data.ResponseTimeLimit;
     }
 
-    // will need to have a ___TimeLimit for when it is bad to respond ie during red square
-    // or do something different
+    // checks if response was within the ResponseTimeLimit, same as IsValidResponse
     protected bool IsWrongResponse(float time)
     {
         NewGameData data = sessionData.gameData as NewGameData;
-        return true;
+        return data.ResponseTimeLimit <= 0 || time < data.ResponseTimeLimit;
     }
 
 }

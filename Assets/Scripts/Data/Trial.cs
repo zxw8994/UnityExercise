@@ -15,6 +15,7 @@ public class Trial
 
 	public const string ATTRIBUTE_IS_GO = "isGo";
 	public const string ATTRIBUTE_DELAY = "delay";
+    public const string ATTRIBUTE_ISRED = "isRed";
 
 	#endregion
 
@@ -23,6 +24,11 @@ public class Trial
 	/// A delay before the Trial begins.
 	/// </summary>
 	public float delay = 0;
+
+    /// <summary>
+    /// Whether the stimulus is red
+    /// </summary>
+    public bool isRed = false;
 
 
 	public Trial(SessionData data, XmlElement n)
@@ -39,6 +45,7 @@ public class Trial
 	public virtual void ParseGameSpecificVars(XmlNode n, SessionData data)
 	{
 		XMLUtil.ParseAttribute(n, ATTRIBUTE_DELAY, ref delay);
+        //XMLUtil.ParseAttribute(n, ATTRIBUTE_ISRED, ref isRed);
 	}
 
 	
@@ -48,5 +55,6 @@ public class Trial
 	public virtual void WriteOutputData(ref XElement elem)
 	{
 		XMLUtil.CreateAttribute(ATTRIBUTE_DELAY, delay.ToString(), ref elem);
+        //XMLUtil.CreateAttribute(ATTRIBUTE_ISRED, isRed.ToString(), ref elem);
 	}
 }

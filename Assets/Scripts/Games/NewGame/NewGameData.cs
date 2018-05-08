@@ -19,14 +19,9 @@ public class NewGameData : GameData {
 
     private float responseTimeLimit = 0;
 
-    // How long player has to wait for red square before it passes
-    // ? could just be a const ? or just use duration
-    private float waitTimeLimit = 0;
-
     private float duration = 0;
 
 
-    // If not a const, waitTimeLimit will need a GET here
     #region ACCESSORS
 
     public float GuessTimeLimit

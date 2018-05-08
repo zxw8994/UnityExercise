@@ -8,7 +8,7 @@ public class NewGameTrial : Trial {
 
 
     public float duration = 0;
-
+    public bool isRed = false;
 
     #region ACCESSORS
 
@@ -19,6 +19,13 @@ public class NewGameTrial : Trial {
             return duration;
         }
     }
+    public bool IsRed
+    {
+        get
+        {
+            return isRed;
+        }
+    }
 
     #endregion
 
@@ -26,7 +33,6 @@ public class NewGameTrial : Trial {
     public NewGameTrial(SessionData data, XmlElement n = null)
         : base(data, n)
     {
-
     }
 
     public override void ParseGameSpecificVars(XmlNode n, SessionData session)
@@ -34,10 +40,11 @@ public class NewGameTrial : Trial {
         base.ParseGameSpecificVars(n, session);
 
         NewGameData data = (NewGameData)(session.gameData);
-        if(!XMLUtil.ParseAttribute(n, ReactData.ATTRIBUTE_DURATION, ref duration, true))
+        if(!XMLUtil.ParseAttribute(n, NewGameData.ATTRIBUTE_DURATION, ref duration, true))
         {
             duration = data.GeneratedDuration;
         }
+        
     }
 
     public override void WriteOutputData(ref XElement elem)
