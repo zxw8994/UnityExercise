@@ -26,8 +26,11 @@ public class GameController : MonoBehaviour
 
 	void Start()
 	{
+        // Plays a random game from the games list
+        int i = UnityEngine.Random.Range(0, gamesList.Length);
+
 		// Assign the game we want to play.
-		activeGame = gamesList[1];
+		activeGame = gamesList[i];
 		// Start the game session by giving it a Session file.
 		activeGame.StartSession(activeGame.sessionFiles[0]);
 		// Assign the active game to the Input controller.

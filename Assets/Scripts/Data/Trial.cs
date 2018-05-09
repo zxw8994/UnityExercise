@@ -16,6 +16,7 @@ public class Trial
 	public const string ATTRIBUTE_IS_GO = "isGo";
 	public const string ATTRIBUTE_DELAY = "delay";
     public const string ATTRIBUTE_ISRED = "isRed";
+    public const string ATTRIBUTE_POSITION = "position";
 
     #endregion
 
@@ -29,6 +30,10 @@ public class Trial
     /// Whether the stimulus is red
     /// </summary>
     public bool isRed = false;
+    /// <summary>
+    /// The stimulus's position.
+    /// </summary>
+    public string position;
 
 
 	public Trial(SessionData data, XmlElement n)
@@ -46,7 +51,7 @@ public class Trial
 	{
         XMLUtil.ParseAttribute(n, ATTRIBUTE_DELAY, ref delay);
         XMLUtil.ParseAttribute(n, ATTRIBUTE_ISRED, ref isRed, true);
- 
+        XMLUtil.ParseAttribute(n, ATTRIBUTE_POSITION, ref position, true);
 
     }
 
@@ -58,5 +63,9 @@ public class Trial
 	{
 		XMLUtil.CreateAttribute(ATTRIBUTE_DELAY, delay.ToString(), ref elem);
         XMLUtil.CreateAttribute(ATTRIBUTE_ISRED, isRed.ToString(), ref elem);
+        if (position != null)
+        {
+            XMLUtil.CreateAttribute(ATTRIBUTE_POSITION, position.ToString(), ref elem);
+        }
 	}
 }

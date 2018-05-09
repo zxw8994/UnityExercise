@@ -9,7 +9,6 @@ public class TrialResult
 	const string ATTRIBUTE_RESPONSE_TIME = "responseTime";
 	const string ATTRIBUTE_ACCURACY = "accuracy";
 
-
 	/// <summary>
 	/// A reference to the Trial data.
 	/// </summary>
@@ -32,7 +31,6 @@ public class TrialResult
 	/// Measured from [0.0 - 1.0]
 	/// </summary>
 	public float accuracy = 0;
-
 
 	#region ACCESSORS
 

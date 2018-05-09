@@ -2,17 +2,17 @@
 <session>
   <settings>
     <general gameType="NewGame" shuffle="true" />
-    <newgame duration="1" guessTimeLimit="0.125" responseTimeLimit =".8" />
+    <newgame duration="1" guessTimeLimit="0.125" responseTimeLimit =".8" rangeX="-350 350" rangeY="-25 135"/>
   </settings>
   <trials>
-    <trial delay="0.2" isRed="false" />
-    <trial delay="0.3" isRed="false" />
-    <trial delay="0.3" isRed="true" />
-    <trial delay="0.5" isRed="false" />
-    <trial delay="0.5" isRed="true" />
-    <trial delay="0.5" isRed="true" />
-    <trial delay="1.0" isRed="false" />
-    <trial delay="1.0" isRed="false" />
-    <trial delay="1.0" isRed="true" />
+    <trial delay="0.2" isRed="false" position="random" />
+    <trial delay="0.3" isRed="false" position="random" />
+    <trial delay="0.3" isRed="true" position="-100 50" />
+    <trial delay="0.5" isRed="false" position="random" />
+    <trial delay="0.5" isRed="true" position="200 135" />
+    <trial delay="0.5" isRed="true" position="-300 -25" />
+    <trial delay="1.0" isRed="false" position="random" />
+    <trial delay="1.0" isRed="false" position="70 90" />
+    <trial delay="1.0" isRed="true" position="150 0" />
   </trials>
 </session>

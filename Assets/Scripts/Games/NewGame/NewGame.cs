@@ -3,6 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
+/// <summary>
+/// In this game, NewGame(Temporary Title), we want to display a stimulus (rectangle) for a defined duration.
+/// During that duration, the player needs to respond as quickly as possible.
+/// However, the player is to only respond to the white rectangle, not the red
+/// Each Trial also has a defined delay to keep the player from guessing.
+/// Some appropriate visual feedback is also displayed according to the player's response.
+/// </summary>
 public class NewGame : GameBase {
 
     const string INSTRUCTIONS = "Press <color=cyan>SpaceBar</color> only when you see a White Square.";
@@ -16,14 +24,27 @@ public class NewGame : GameBase {
     Color RESPONSE_COLOR_GOOD = Color.green;
     Color RESPONSE_COLOR_BAD = Color.red;
 
+    /// <summary>
+	/// A reference to the UI canvas so we can instantiate the feedback text.
+	/// </summary>
     public GameObject uiCanvas;
-
+    /// <summary>
+	/// The object that will be displayed briefly to the player.
+	/// </summary>
     public GameObject stimulus;
-
+    /// <summary>
+	/// A prefab for an animated text label that appears when a trial fails/succeeds.
+	/// </summary>
     public GameObject feedbackTextPrefab;
-
+    /// <summary>
+	/// The instructions text label.
+	/// </summary>
     public Text instructionsText;
 
+
+    /// <summary>
+	/// Called when the game session has started.
+	/// </summary>
     public override GameBase StartSession(TextAsset sessionFile)
     {
         base.StartSession(sessionFile);
@@ -34,6 +55,10 @@ public class NewGame : GameBase {
         return this;
     }
 
+
+    /// <summary>
+	/// Iterates through all the trials, and calls the appropriate Start/End/Finished events.
+	/// </summary>
     protected virtual IEnumerator RunTrials(SessionData data)
     {
         foreach(Trial t in data.trials)
@@ -45,14 +70,32 @@ public class NewGame : GameBase {
         FinishedSession();
         yield break;
     }
-    
-    // Will need to tell this which stimulus to display Red/Green
+
+
+    /// <summary>
+	/// Displays the Stimulus for a specified duration.
+	/// During that duration the player needs to respond as quickly as possible.
+	/// </summary>
     protected virtual IEnumerator DisplayStimulus(Trial t)
     {
         GameObject stim = stimulus;
         stim.SetActive(false);
 
+        Vector2 originalPos = stim.transform.localPosition;
+        NewGameData data = sessionData.gameData as NewGameData;
+
+        if (t.position == "random")
+        {
+            stim.transform.localPosition = new Vector2(Random.Range(data.RandomRangeX[0], data.RandomRangeX[1]), Random.Range(data.RandomRangeY[0], data.RandomRangeY[1]));
+        }
+        else
+        {
+            int[] pos = data.SplitPosition(t.position);
+            stim.transform.localPosition = new Vector2(pos[0],pos[1]);
+        }
+
         stim.GetComponent<Image>().color = Color.white;
+
         if (t.isRed)
         {
             stim.GetComponent<Image>().color = RESPONSE_COLOR_BAD;
@@ -65,19 +108,28 @@ public class NewGame : GameBase {
 
         yield return new WaitForSeconds(((NewGameTrial)t).duration);
         stim.SetActive(false);
+        stim.transform.localPosition = originalPos;
         EndInput();
 
         yield break;
 
     }
-    
 
+    /// <summary>
+    /// Called when the game session is finished.
+    /// e.g. All session trials have been completed.
+    /// </summary>
     protected override void FinishedSession()
     {
         base.FinishedSession();
         instructionsText.text = FINISHED;
     }
 
+
+    /// <summary>
+	/// Called when the player makes a response during a Trial.
+	/// StartInput needs to be called for this to execute, or override the function.
+	/// </summary>
     public override void PlayerResponded(KeyCode key, float time)
     {
         if (!listenForInput)
@@ -92,6 +144,10 @@ public class NewGame : GameBase {
         }
     }
 
+
+    /// <summary>
+	/// Adds a result to the SessionData for the given trial.
+	/// </summary>
     protected override void AddResult(Trial t, float time)
     {
         TrialResult r = new TrialResult(t);
@@ -141,6 +197,10 @@ public class NewGame : GameBase {
         sessionData.results.Add(r);
     }
 
+
+    /// <summary>
+	/// Display visual feedback on whether the trial has been responded to correctly or incorrectly.
+	/// </summary>
     private void DisplayFeedBack(string text, Color color)
     {
         GameObject g = Instantiate(feedbackTextPrefab);
@@ -151,6 +211,11 @@ public class NewGame : GameBase {
         t.color = color;
     }
 
+
+    /// <summary>
+	/// Returns the players response accuracy.
+	/// The perfect accuracy would be 1, most inaccuracy is 0.
+	/// </summary>
     protected float GetAccuracy(Trial t, float time)
     {
         NewGameData data = sessionData.gameData as NewGameData;
@@ -163,19 +228,30 @@ public class NewGame : GameBase {
         return 1f - (rTime / (totalTimeWindow - data.GuessTimeLimit));
     }
 
+
+    /// <summary>
+	/// Returns True if the given response time is considered a guess.
+	/// </summary>
     protected bool IsGuessResponse(float time)
     {
         NewGameData data = sessionData.gameData as NewGameData;
         return data.GuessTimeLimit > 0 && time < data.GuessTimeLimit;
     }
 
+
+    /// <summary>
+	/// Returns True if the given response time is considered valid.
+	/// </summary>
     protected bool IsValidResponse(float time)
     {
         NewGameData data = sessionData.gameData as NewGameData;
         return data.ResponseTimeLimit <= 0 || time < data.ResponseTimeLimit;
     }
 
-    // checks if response was within the ResponseTimeLimit, same as IsValidResponse
+    
+    /// <summary>
+    /// Returns True if the player responded while the stimulus was red
+    /// </summary>
     protected bool IsWrongResponse(float time)
     {
         NewGameData data = sessionData.gameData as NewGameData;
