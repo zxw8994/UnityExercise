@@ -46,5 +46,15 @@ In this game you should be able to:
 
 
 # Submission
+The new game rules are simple, a white or red rectangle stimulus will be briefly displayed and the player has to respond to it quickly. However, it is only treated as a success when responding to a white stimulus and ignoring a red one.
 
-For your submission, extend this README documenting the rules of the new game, how the code works, how scoring works in the new game, and any other interesting or useful things you can think of for us to take into consideration. Then zip the git repository and send it to us.
+To play the new game, go to the GameController inpector and either check the Random Game bool to randomly play one of the games in the Games List or set the Which Game slider to 1.
+
+
+The NewGame.xml session file contains the parameters for the game. Like React it has duration, guessTimeLimit, responseTimeLimit, and delay. It also has parameters for the whether the trial isRed, if its position is random or pre-set(Ex. "100 200"), and ranges for its position when selected to be random.
+
+Trial.cs had to be modified to parse in from the session file if a trial was red and its position. Compared to ReactData, NewGameData parses and stores the X and Y ranges from the Session file in addition to having a function to split a string and parse it into an int. This was used for storing the position ranges and pre-set positions of the stimulus.
+
+In the base script for NewGame, during the DisplayStimulus coroutine, each trial's position attribute is check for being set to "random" otherwise it calls the function that splits and parses strings SplitPosition() to get the pre-set position of the stimulus for the trial. Checking and setting the stimulus as red is also in DisplayStimulus(). The user responding to a red stimulus is simply checked by seeing if isRed for the trial was true and if the time was within the response time limit or passed it.
+
+These were the biggest changes made, smaller changes/additions were made to other scripts to allow NewGame to function with the codebase. 

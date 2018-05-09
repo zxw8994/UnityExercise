@@ -13,7 +13,11 @@ public class GameController : MonoBehaviour
 {
 	public InputController inputCtrl;
 	public GameBase[] gamesList;
-	
+    public bool randomGame = true;
+
+    [Range(0,1)]
+    public int whichGame;
+
 	GameBase activeGame;
 	
 
@@ -27,10 +31,12 @@ public class GameController : MonoBehaviour
 	void Start()
 	{
         // Plays a random game from the games list
-        int i = UnityEngine.Random.Range(0, gamesList.Length);
-
+        if (randomGame)
+        {
+            whichGame = UnityEngine.Random.Range(0, gamesList.Length);
+        }
 		// Assign the game we want to play.
-		activeGame = gamesList[i];
+		activeGame = gamesList[whichGame];
 		// Start the game session by giving it a Session file.
 		activeGame.StartSession(activeGame.sessionFiles[0]);
 		// Assign the active game to the Input controller.
